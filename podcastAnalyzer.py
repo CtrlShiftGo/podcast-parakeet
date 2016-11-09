@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import math
 import urllib2
 from lxml import etree
