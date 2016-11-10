@@ -24,5 +24,6 @@ if __name__ == "__main__":
     if url[0] != '"' or url[-1:] != '"':
         print "Error: The URL must be surrounded by quotation marks."
         sys.exit(1)
-
+    url = url[1:-1]
+    print url
     parse_url(url)
