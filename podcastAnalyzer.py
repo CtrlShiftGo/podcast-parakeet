@@ -8,31 +8,42 @@ from lxml import etree
 
 class Epsiode(object):
     def __init__(self, duration, pubDate):
-        self.duration = duration
-        date_string = pubDate.split(" ")[0:-2]
-        date_string = " ".join(date_string)
-        self.pubDate = datetime.strptime(date_string, "%a, %d %b %Y")
+        self.duration = duration.split(":")
+        if len(self.duration) > 2:
+            self.duration = float(int(self.duration[0]))*60 + float(int(self.duration[1])) + float(int(self.duration[2]))/60
+        else:
+            self.duration = float(int(self.duration[0])) + float(int(self.duration[1]))/60
+
+        self.pubDate = pubDate.split(" ")[0:-2]
+        self.pubDate = " ".join(self.pubDate)
+        self.pubDate = datetime.strptime(self.pubDate, "%a, %d %b %Y")
         # print type(self.pubDate)
 
 def calc_podcast_rate(episode_list):
-  rate_array = []
-  end_date = datetime.today()
-  for episode in episode_list:
-    period = end_date - episode.pubDate
-    rate = episode.duration/period.days
-    rate_array.append_rate
-    end_date = episode.pubDate
-  return rate_array
+    rate_array = []
+    end_date = datetime.today()
+    for episode in episode_list:
+        period = end_date - episode.pubDate
+        rate = episode.duration/period.days
+        rate_array.append(rate * 7)
+        end_date = episode.pubDate
+    return rate_array
 
 def parse_url(url):
     socket = urllib2.urlopen(url)
     raw_xml = socket.read()
     parsed_xml = etree.fromstring(raw_xml)
 
+    episode_list = []
     for episode in parsed_xml[0].findall('item'):
-        print episode.find('title').text
-        print episode.find('itunes:duration', parsed_xml.nsmap).text
-        print episode.find('pubDate').text
+        if(episode.find('itunes:duration', parsed_xml.nsmap) != None):
+            duration = episode.find('itunes:duration', parsed_xml.nsmap).text
+            pubDate = episode.find('pubDate').text
+            new_episode = Epsiode(duration, pubDate)
+            episode_list.append(new_episode)
+
+    rate_array = calc_podcast_rate(episode_list)
+    print sum(rate_array)/float(len(rate_array))
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -44,5 +55,4 @@ if __name__ == "__main__":
         print "Error: The URL must be surrounded by quotation marks."
         sys.exit(1)
     url = url[1:-1]
-    print url
     parse_url(url)
