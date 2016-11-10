@@ -3,7 +3,26 @@
 import math
 import sys
 import urllib2
+from datetime import datetime
 from lxml import etree
+
+class Epsiode(object):
+    def __init__(self, duration, pubDate):
+        self.duration = duration
+        date_string = pubDate.split(" ")[0:-2]
+        date_string = " ".join(date_string)
+        self.pubDate = datetime.strptime(date_string, "%a, %d %b %Y")
+        # print type(self.pubDate)
+
+def calc_podcast_rate(episode_list):
+  rate_array = []
+  end_date = datetime.today()
+  for episode in episode_list:
+    period = end_date - episode.pubDate
+    rate = episode.duration/period.days
+    rate_array.append_rate
+    end_date = episode.pubDate
+  return rate_array
 
 def parse_url(url):
     socket = urllib2.urlopen(url)
