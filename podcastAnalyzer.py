@@ -34,6 +34,10 @@ def parse_url(url):
     raw_xml = socket.read()
     parsed_xml = etree.fromstring(raw_xml)
 
+    if(parsed_xml.tag != "rss" and parsed_xml[0].tag != "channel"):
+        print "Incorrect XML format."
+        return 0
+
     episode_list = []
     for episode in parsed_xml[0].findall('item'):
         if(episode.find('itunes:duration', parsed_xml.nsmap) != None):
