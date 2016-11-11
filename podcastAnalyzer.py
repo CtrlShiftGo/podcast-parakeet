@@ -6,7 +6,7 @@ import urllib2
 from datetime import datetime
 from lxml import etree
 
-class Epsiode(object):
+class Episode(object):
     def __init__(self, duration, pubDate):
         self.duration = duration.split(":")
         if len(self.duration) > 2:
@@ -39,7 +39,7 @@ def parse_url(url):
         if(episode.find('itunes:duration', parsed_xml.nsmap) != None):
             duration = episode.find('itunes:duration', parsed_xml.nsmap).text
             pubDate = episode.find('pubDate').text
-            new_episode = Epsiode(duration, pubDate)
+            new_episode = Episode(duration, pubDate)
             episode_list.append(new_episode)
 
     rate_array = calc_podcast_rate(episode_list)
