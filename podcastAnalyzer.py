@@ -54,9 +54,9 @@ if __name__ == "__main__":
         print "Usage: ./podcastAnalyzer.py \"URL\""
         sys.exit(1)
 
-    url = sys.argv[1]
-    if url[0] != '"' or url[-1:] != '"':
-        print "Error: The URL must be surrounded by quotation marks."
-        sys.exit(1)
-    url = url[1:-1]
-    parse_url(url)
+    for url in sys.argv[1:]:
+        print url
+        try:
+            parse_url(url)
+        except lxml.etree._raiseParseError:
+            print "Unable to parse: " + url
