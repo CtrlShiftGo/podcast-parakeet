@@ -66,6 +66,6 @@ if __name__ == "__main__":
     print
     total_minutes_per_week = 0
     for key, value in rate_dictionary.iteritems():
-        print "{}: {:.2f} Minutes per Week".format(key, value)
+        print "{}:\n\t{:.2f} Minutes per Week".format(key, value)
         total_minutes_per_week += value
-    print "Total: {:.2f} Minutes per Week".format(total_minutes_per_week)
+    print "Total:\n\t{:.2f} Minutes per Week".format(total_minutes_per_week)
