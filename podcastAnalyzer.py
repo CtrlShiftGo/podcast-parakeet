@@ -47,16 +47,25 @@ def parse_url(url):
             episode_list.append(new_episode)
 
     rate_array = calc_podcast_rate(episode_list)
-    print sum(rate_array)/float(len(rate_array))
+    return (parsed_xml[0].find('title').text , sum(rate_array)/float(len(rate_array)))
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print "Usage: ./podcastAnalyzer.py \"URL\""
         sys.exit(1)
 
+    rate_dictionary = {}
     for url in sys.argv[1:]:
-        print url
         try:
-            parse_url(url)
-        except lxml.etree._raiseParseError:
+            podcast_information = parse_url(url)
+            rate_dictionary[podcast_information[0]] = podcast_information[1]
+        except:
             print "Unable to parse: " + url
+
+    # Display Ouput
+    print
+    total_minutes_per_week = 0
+    for key, value in rate_dictionary.iteritems():
+        print "{}: {:.2f} Minutes per Week".format(key, value)
+        total_minutes_per_week += value
+    print "Total: {:.2f} Minutes per Week".format(total_minutes_per_week)
