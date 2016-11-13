@@ -17,7 +17,6 @@ class Episode(object):
         self.pubDate = pubDate.split(" ")[0:-2]
         self.pubDate = " ".join(self.pubDate)
         self.pubDate = datetime.strptime(self.pubDate, "%a, %d %b %Y")
-        # print type(self.pubDate)
 
 def calc_podcast_rate(episode_list):
     rate_array = []
