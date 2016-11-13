@@ -29,9 +29,7 @@ def calc_podcast_rate(episode_list):
     return rate_array
 
 def parse_url(url):
-    socket = urllib2.urlopen(url)
-    raw_xml = socket.read()
-    parsed_xml = etree.fromstring(raw_xml)
+    parsed_xml = etree.fromstring(urllib2.urlopen(url).read())
 
     if(parsed_xml.tag != "rss" and parsed_xml[0].tag != "channel"):
         print "Incorrect XML format."
