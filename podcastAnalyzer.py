@@ -31,7 +31,7 @@ def calc_podcast_rate(episode_list):
     return rate_array
 
 def parse_url(url):
-    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+    user_agent = 'podcast-parakeet/0.1.0 (+https://github.com/CtrlShiftGo/podcast-parakeet)'
     request = urllib2.Request(url, headers={'User-Agent':user_agent})
     parsed_xml = etree.fromstring(urllib2.urlopen(request).read())
 
