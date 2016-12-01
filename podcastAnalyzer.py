@@ -5,6 +5,7 @@ import sys
 import urllib2
 from datetime import datetime
 from lxml import etree
+import traceback
 
 class Episode(object):
     def __init__(self, duration, pubDate):
@@ -52,12 +53,20 @@ if __name__ == "__main__":
         sys.exit(1)
 
     rate_dictionary = {}
+    debugMode = False
+    for command in sys.argv[1:]:
+        if(command == "-v" or command == "--verbose"):
+            debugMode = True
+            sys.argv.remove(command)
     for url in sys.argv[1:]:
         try:
             podcast_information = parse_url(url)
             rate_dictionary[podcast_information[0]] = podcast_information[1]
-        except:
-            print "Unable to parse: " + url
+        except Exception, e:
+            print "Unable to parse: " + str(url)
+            if(debugMode):
+                traceback.print_exc()
+                print "============================================="
 
     # Display Ouput
     print
