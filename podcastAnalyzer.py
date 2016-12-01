@@ -21,15 +21,19 @@ class Episode(object):
 def calc_podcast_rate(episode_list):
     rate_array = []
     end_date = datetime.today()
+    SECONDS_IN_DAY = 86400.0
     for episode in episode_list:
         period = end_date - episode.pubDate
-        rate = episode.duration/period.days
-        rate_array.append(rate * 7)
-        end_date = episode.pubDate
+        if(period.total_seconds() > 0):
+            rate = episode.duration/(period.total_seconds()/SECONDS_IN_DAY)
+            rate_array.append(rate * 7)
+            end_date = episode.pubDate
     return rate_array
 
 def parse_url(url):
-    parsed_xml = etree.fromstring(urllib2.urlopen(url).read())
+    user_agent = 'podcast-parakeet/0.1.0 (+https://github.com/CtrlShiftGo/podcast-parakeet)'
+    request = urllib2.Request(url, headers={'User-Agent':user_agent})
+    parsed_xml = etree.fromstring(urllib2.urlopen(request).read())
 
     if(parsed_xml.tag != "rss" and parsed_xml[0].tag != "channel"):
         print "Incorrect XML format."
