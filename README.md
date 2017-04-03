@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-Reads podcast RSS feeds to determine average number of minutes uploaded per week to better adjust listening habits. Optimize the number of podcasts to which you subscribe so as to never run out or fall behind in your listening.
+Reads podcast RSS feeds to determine average number of minutes uploaded per week in order to better adjust listening habits. Optimizes the number of podcasts you subscribe to so you never run out or fall behind in your listening.
 
 ## Example Usage and Output
 ```
