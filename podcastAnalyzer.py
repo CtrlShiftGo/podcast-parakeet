@@ -7,6 +7,8 @@ from datetime import datetime
 from lxml import etree
 import traceback
 
+fileMode = False
+
 class Episode(object):
     def __init__(self, duration, pubDate):
         if(":" in duration):
@@ -66,15 +68,33 @@ if __name__ == "__main__":
         if(command == "-v" or command == "--verbose"):
             debugMode = True
             sys.argv.remove(command)
-    for url in sys.argv[1:]:
-        try:
-            podcast_information = parse_url(url)
-            rate_dictionary[podcast_information[0]] = podcast_information[1]
-        except Exception, e:
-            print "Unable to parse: " + str(url)
-            if(debugMode):
-                traceback.print_exc()
-                print "============================================="
+        elif(command == "-f" or command == "--verbose"):
+            fileMode = True
+            sys.argv.remove(command)
+    if(fileMode):
+        for fileName in sys.argv[1:]:
+            textFile = open(fileName)
+            for line in textFile:
+                try:
+                    line = line.strip("\n")
+                    if(line[0] != "#"):
+                        podcast_information = parse_url(line)
+                        rate_dictionary[podcast_information[0]] = podcast_information[1]
+                except Exception, e:
+                    print "Unable to parse: " + str(line)
+                    if(debugMode):
+                        traceback.print_exc()
+                        print "============================================="
+    else:
+        for url in sys.argv[1:]:
+            try:
+                podcast_information = parse_url(url)
+                rate_dictionary[podcast_information[0]] = podcast_information[1]
+            except Exception, e:
+                print "Unable to parse: " + str(url)
+                if(debugMode):
+                    traceback.print_exc()
+                    print "============================================="
 
     # Display Ouput
     print
