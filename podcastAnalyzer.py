@@ -9,12 +9,16 @@ import traceback
 
 class Episode(object):
     def __init__(self, duration, pubDate):
-        self.duration = duration.split(":")
-        if len(self.duration) > 2:
-            self.duration = float(int(self.duration[0]))*60 + float(int(self.duration[1])) + float(int(self.duration[2]))/60
+        if(":" in duration):
+            # Check for colon separated date format
+            self.duration = duration.split(":")
+            if len(self.duration) > 2:
+                self.duration = float(int(self.duration[0]))*60 + float(int(self.duration[1])) + float(int(self.duration[2]))/60
+            else:
+                self.duration = float(int(self.duration[0])) + float(int(self.duration[1]))/60
         else:
-            self.duration = float(int(self.duration[0])) + float(int(self.duration[1]))/60
-
+            # Assuming time format is in seconds
+            self.duration = float(duration)/60
         self.pubDate = pubDate.split(" ")[0:-2]
         self.pubDate = " ".join(self.pubDate)
         self.pubDate = datetime.strptime(self.pubDate, "%a, %d %b %Y")
