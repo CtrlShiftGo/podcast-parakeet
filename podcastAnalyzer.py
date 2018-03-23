@@ -71,6 +71,18 @@ def read_custom_podfile(textFile, rate_dictionary):
                         print "============================================="
 
 def read_opml(opmlFile, rate_dictionary):
+    opmlText = opmlFile.read()
+    parsed_xml = etree.fromstring(opmlText)
+    print(parsed_xml[1].tag)
+    for podcast in parsed_xml[1].findall('outline'):
+        try:
+            podcast_information = parse_url(podcast.get('xmlUrl'))
+            rate_dictionary[podcast_information[0]] = podcast_information[1]
+        except Exception, e:
+            print "Unable to parse: " + str(podcast.get('text'))
+            if(debugMode):
+                traceback.print_exc()
+                print "============================================="
     return 0
 
 if __name__ == "__main__":
@@ -93,7 +105,10 @@ if __name__ == "__main__":
         for fileName in sys.argv[1:]:
             # Determine filetype
             textFile = open(fileName)
-            read_custom_podfile(textFile, rate_dictionary)
+            if(fileName.endswith('.opml')):
+                read_opml(textFile, rate_dictionary)
+            else:
+                read_custom_podfile(textFile, rate_dictionary)
     else:
         for url in sys.argv[1:]:
             try:
