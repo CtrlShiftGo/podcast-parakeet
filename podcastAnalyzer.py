@@ -57,24 +57,8 @@ def parse_url(url):
     rate_array = calc_podcast_rate(episode_list)
     return (parsed_xml[0].find('title').text , sum(rate_array)/float(len(rate_array)))
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print "Usage: ./podcastAnalyzer.py \"URL\""
-        sys.exit(1)
-
-    rate_dictionary = {}
-    debugMode = False
-    for command in sys.argv[1:]:
-        if(command == "-v" or command == "--verbose"):
-            debugMode = True
-            sys.argv.remove(command)
-        elif(command == "-f" or command == "--verbose"):
-            fileMode = True
-            sys.argv.remove(command)
-    if(fileMode):
-        for fileName in sys.argv[1:]:
-            textFile = open(fileName)
-            for line in textFile:
+def read_custom_podfile(textFile, rate_dictionary):
+    for line in textFile:
                 try:
                     line = line.strip("\n")
                     if(line[0] != "#"):
@@ -85,6 +69,46 @@ if __name__ == "__main__":
                     if(debugMode):
                         traceback.print_exc()
                         print "============================================="
+
+def read_opml(opmlFile, rate_dictionary):
+    opmlText = opmlFile.read()
+    parsed_xml = etree.fromstring(opmlText)
+    print(parsed_xml[1].tag)
+    for podcast in parsed_xml[1].findall('outline'):
+        try:
+            podcast_information = parse_url(podcast.get('xmlUrl'))
+            rate_dictionary[podcast_information[0]] = podcast_information[1]
+        except Exception, e:
+            print "Unable to parse: " + str(podcast.get('text'))
+            if(debugMode):
+                traceback.print_exc()
+                print "============================================="
+    return 0
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print "Usage: ./podcastAnalyzer.py \"URL\""
+        sys.exit(1)
+
+    # Parse command list
+    rate_dictionary = {}
+    debugMode = False
+    for command in sys.argv[1:]:
+        if(command == "-v" or command == "--verbose"):
+            debugMode = True
+            sys.argv.remove(command)
+        elif(command == "-f" or command == "--verbose"):
+            fileMode = True
+            sys.argv.remove(command)
+    # Opens file
+    if(fileMode):
+        for fileName in sys.argv[1:]:
+            # Determine filetype
+            textFile = open(fileName)
+            if(fileName.endswith('.opml')):
+                read_opml(textFile, rate_dictionary)
+            else:
+                read_custom_podfile(textFile, rate_dictionary)
     else:
         for url in sys.argv[1:]:
             try:
