@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-Reads podcast RSS feeds to determine average number of minutes uploaded per week in order to better adjust listening habits. Optimizes the number of podcasts you subscribe to so you never run out or fall behind in your listening.
+The Podcast Analyzer reads podcast RSS feeds to determine the average length of podcasts uploaded per week. It uses this information to better adjust listening habits. The analyzer also optimizes the number of podcasts you subscribe to, so you never run out of episodes or fall behind.
 
 ## Example Usage and Output
 ```
