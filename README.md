@@ -10,6 +10,9 @@ The Podcast Analyzer reads podcast RSS feeds to determine the average length of 
 Unable to parse: https://www.relay.fm/cortex/feed
 Unable to parse: http://feeds.99percentinvisible.org/99percentinvisible
 
+Test commit message
+
+
 Dear Hank and John:
 	47.77 Minutes per Week
 Hello Internet:
